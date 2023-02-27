@@ -1,1 +1,7 @@
-{}
+{
+	"Success": "Success",
+	"Failed": "Failed",
+	"User already exist.": "User already exist.",
+	"Interest Rate already exist.": "Interest Rate already exist.",
+	"Penalty amount already exist.": "Penalty amount already exist."
+}

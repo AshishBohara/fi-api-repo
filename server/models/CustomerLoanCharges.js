@@ -1,7 +1,15 @@
 import { Sequelize } from 'sequelize';
 
 export default (sequelize) => {
-  const MasterLoanCharges = sequelize.define('master_loan_charges', {
+  const CustomerLoanCharges = sequelize.define('customer_loan_charges', {
+    customerId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    customerLoanId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
     chargesName: {
       type: Sequelize.STRING(100),
       allowNull: false,
@@ -9,10 +17,6 @@ export default (sequelize) => {
     },
     amount: {
       type: Sequelize.INTEGER(30),
-      allowNull: false,
-    },
-    isDeleted: {
-      type: Sequelize.BOOLEAN,
       allowNull: false,
     },
     createdBy: {
@@ -24,5 +28,5 @@ export default (sequelize) => {
       allowNull: true,
     },
   });
-  return MasterLoanCharges;
+  return CustomerLoanCharges;
 };

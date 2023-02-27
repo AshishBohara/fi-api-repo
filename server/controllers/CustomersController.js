@@ -1,0 +1,86 @@
+export const create = (db) => async (req, res, next) => {
+  try {
+    const reqBody = req.body;
+    const recordExist = await db.Customer.count({
+      where: {
+        mobileNumber: reqBody.mobileNumber,
+      },
+    });
+    if (recordExist > 0) {
+      return res.alredyExist({
+        message: 'Customer already exist.',
+      });
+    }
+    const loanCharges = await db.Customer.create({
+      mobileNumber: reqBody.mobileNumber,
+      name: reqBody.name,
+      fatherName: reqBody.fatherName,
+    });
+    if (loanCharges) {
+      return res.ok({
+        message: 'Success',
+        data: loanCharges,
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const list = (db) => async (req, res, next) => {
+  try {
+    const records = await db.Customer.findAll();
+    if (records) {
+      return res.ok({
+        message: 'Success',
+        data: records,
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const view = (db) => async (req, res, next) => {
+  const reqQuery = req.query;
+
+  try {
+    const record = await db.Customer.findOne({
+      where: {
+        id: reqQuery.id,
+      },
+    });
+    if (record) {
+      return res.ok({
+        message: 'Success',
+        data: record,
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const update = (db) => async (req, res, next) => {
+  try {
+    const reqBody = req.body;
+    const record = await db.Customer.findOne({
+      where: {
+        id: reqBody.id,
+      },
+    });
+    await record.update({
+      mobileNumber: reqBody.mobileNumber,
+      name: reqBody.name,
+      fatherName: reqBody.fatherName,
+    });
+    if (record) {
+      return res.ok({
+        message: 'Success',
+        data: record,
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
+};

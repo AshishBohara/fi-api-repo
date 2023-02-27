@@ -8,11 +8,11 @@ export default (sequelize) => {
     },
     createdBy: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     updatedBy: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
   });
   return MasterInterestRates;

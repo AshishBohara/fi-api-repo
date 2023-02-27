@@ -7,6 +7,8 @@ import cors from 'cors';
 
 import config from '../config';
 import dbConnection from './connection';
+import routerSetup from './routing';
+import { errorHandler, extendedRequestMiddleware, notFound, unauthorizedError } from './middleware';
 
 const app = express();
 
@@ -37,7 +39,7 @@ const corsOptions = {
   credentials: true,
 };
 
-// app.use('*', cors(corsOptions));
+app.use('*', cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set('showstackError', true);
@@ -46,6 +48,7 @@ app.set('showstackError', true);
 app.use(i18n.init);
 app.use(compression());
 app.use(helmet());
+app.use(extendedRequestMiddleware);
 
 // Route for server health check
 
@@ -63,6 +66,10 @@ app.route('/health-fi').get(async (req, res, next) => {
 
 (async () => {
   const db = await dbConnection();
+  routerSetup(app, db);
+  app.use(unauthorizedError);
+  app.use(errorHandler);
+  app.use(notFound);
 })();
 
 export default app;

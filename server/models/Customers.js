@@ -1,18 +1,19 @@
 import { Sequelize } from 'sequelize';
 
 export default (sequelize) => {
-  const Users = sequelize.define('users', {
+  const Cutomers = sequelize.define('customers', {
+    name: {
+      type: Sequelize.STRING(50),
+      allowNull: false,
+    },
+    fatherName: {
+      type: Sequelize.STRING(50),
+      allowNull: false,
+    },
     mobileNumber: {
       type: Sequelize.STRING(30),
       allowNull: false,
-    },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    name: {
-      type: Sequelize.STRING(30),
-      allowNull: false,
+      unique: true,
     },
     createdBy: {
       type: Sequelize.INTEGER,
@@ -23,5 +24,5 @@ export default (sequelize) => {
       allowNull: true,
     },
   });
-  return Users;
+  return Cutomers;
 };

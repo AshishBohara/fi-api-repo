@@ -3,6 +3,10 @@ import { Sequelize } from 'sequelize';
 import config from '../config';
 
 import Users from './models/Users';
+import MasterInterestRates from './models/MasterInterestRates';
+import MasterPenalties from './models/MasterPenalties';
+import MasterLoanCharges from './models/MasterLoanCharges';
+import Customers from './models/Customers';
 
 const db = {};
 
@@ -29,7 +33,10 @@ export default async () => {
       sequelize.authenticate();
       // Bootstrap Models
       db.User = Users(sequelize);
-
+      db.MasterInterestRate = MasterInterestRates(sequelize);
+      db.MasterPenalty = MasterPenalties(sequelize);
+      db.MasterLoanCharge = MasterLoanCharges(sequelize);
+      db.Customer = Customers(sequelize);
       // Define relationship among diffrent tables
 
       sequelize.sync({ force: false });
