@@ -54,3 +54,42 @@ export const addLoan = (db) => async (req, res, next) => {
     next(e);
   }
 };
+
+export const list = (db) => async (req, res, next) => {
+  try {
+    const reqQuery = req.query;
+    const customerId = reqQuery.customerId;
+    const records = await db.CustomerLoan.findAll({
+      where: { customerId: customerId },
+      include: { model: db.Customer, attributes: ['name', 'mobileNumber'] },
+    });
+    if (records) {
+      return res.ok({
+        message: 'Success',
+        data: records,
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const installmemtList = (db) => async (req, res, next) => {
+  try {
+    const reqQuery = req.query;
+    const customerId = reqQuery.customerId;
+    const customerLoanId = reqQuery.customerLoanId;
+    const records = await db.CustomerLoanInstallment.findAll({
+      where: { customerId: customerId, customerLoanId: customerLoanId },
+      include: { model: db.Customer, attributes: ['name', 'mobileNumber'] },
+    });
+    if (records) {
+      return res.ok({
+        message: 'Success',
+        data: records,
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
+};

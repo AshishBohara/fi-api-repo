@@ -50,6 +50,8 @@ export default async () => {
       db.CustomerLoanInstallment.belongsTo(db.Customer);
       db.CustomerLoanInstallment.belongsTo(db.CustomerLoan);
 
+      db.CustomerLoan.belongsTo(db.Customer);
+
       db.Customer.belongsTo(db.User, { foreignKey: 'createdBy' });
       db.Customer.belongsTo(db.User, { foreignKey: 'updatedBy' });
       db.CustomerLoan.belongsTo(db.User, { foreignKey: 'createdBy' });
