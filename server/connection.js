@@ -7,6 +7,9 @@ import MasterInterestRates from './models/MasterInterestRates';
 import MasterPenalties from './models/MasterPenalties';
 import MasterLoanCharges from './models/MasterLoanCharges';
 import Customers from './models/Customers';
+import CustomerLoans from './models/CustomerLoans';
+import CustomerLoanCharges from './models/CustomerLoanCharges';
+import CustomerLoanInstallments from './models/CustomerLoanInstallments';
 
 const db = {};
 
@@ -37,8 +40,33 @@ export default async () => {
       db.MasterPenalty = MasterPenalties(sequelize);
       db.MasterLoanCharge = MasterLoanCharges(sequelize);
       db.Customer = Customers(sequelize);
+      db.CustomerLoan = CustomerLoans(sequelize);
+      db.CustomerLoanCharge = CustomerLoanCharges(sequelize);
+      db.CustomerLoanInstallment = CustomerLoanInstallments(sequelize);
       // Define relationship among diffrent tables
+      db.Customer.hasMany(db.CustomerLoan);
+      db.CustomerLoanCharge.belongsTo(db.Customer);
+      db.CustomerLoanCharge.belongsTo(db.CustomerLoan);
+      db.CustomerLoanInstallment.belongsTo(db.Customer);
+      db.CustomerLoanInstallment.belongsTo(db.CustomerLoan);
 
+      db.Customer.belongsTo(db.User, { foreignKey: 'createdBy' });
+      db.Customer.belongsTo(db.User, { foreignKey: 'updatedBy' });
+      db.CustomerLoan.belongsTo(db.User, { foreignKey: 'createdBy' });
+      db.CustomerLoan.belongsTo(db.User, { foreignKey: 'updatedBy' });
+      db.CustomerLoanCharge.belongsTo(db.User, { foreignKey: 'createdBy' });
+      db.CustomerLoanCharge.belongsTo(db.User, { foreignKey: 'updatedBy' });
+      db.CustomerLoanInstallment.belongsTo(db.User, { foreignKey: 'createdBy' });
+      db.CustomerLoanInstallment.belongsTo(db.User, { foreignKey: 'updatedBy' });
+      db.MasterInterestRate.belongsTo(db.User, { foreignKey: 'createdBy' });
+      db.MasterInterestRate.belongsTo(db.User, { foreignKey: 'updatedBy' });
+      db.MasterPenalty.belongsTo(db.User, { foreignKey: 'createdBy' });
+      db.MasterPenalty.belongsTo(db.User, { foreignKey: 'updatedBy' });
+      db.MasterLoanCharge.belongsTo(db.User, { foreignKey: 'createdBy' });
+      db.MasterLoanCharge.belongsTo(db.User, { foreignKey: 'updatedBy' });
+      db.User.belongsTo(db.User, { foreignKey: 'createdBy' });
+      db.User.belongsTo(db.User, { foreignKey: 'updatedBy' });
+      //
       sequelize.sync({ force: false });
       console.log('Database -> Connected');
       db.sequelize = sequelize;

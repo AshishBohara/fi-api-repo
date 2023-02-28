@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 
 export default (sequelize) => {
-  const CustomerLoans = sequelize.define('customer_loans', {
+  const CustomerLoanInstallments = sequelize.define('customer_loan_installments', {
     customerId: {
       type: Sequelize.INTEGER,
       allowNull: false,
@@ -32,11 +32,11 @@ export default (sequelize) => {
     },
     paymentReceivedDate: {
       type: Sequelize.DATEONLY,
-      allowNull: false,
+      allowNull: true,
     },
     installmentCompleted: {
       type: Sequelize.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
     },
     createdBy: {
       type: Sequelize.INTEGER,
@@ -47,5 +47,5 @@ export default (sequelize) => {
       allowNull: true,
     },
   });
-  return CustomerLoans;
+  return CustomerLoanInstallments;
 };

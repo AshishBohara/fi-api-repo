@@ -30,6 +30,10 @@ export default (sequelize) => {
       type: Sequelize.BOOLEAN,
       allowNull: false,
     },
+    loanDate: {
+      type: Sequelize.DATEONLY,
+      allowNull: false,
+    },
     createdBy: {
       type: Sequelize.INTEGER,
       allowNull: true,

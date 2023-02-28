@@ -1,3 +1,4 @@
+import CustomerLoansRoutes from './routes/CustomerLoansRoutes';
 import CustomersRoutes from './routes/CustomersRoutes';
 import MasterInterestRateRoutes from './routes/MasterInterestRateRoutes';
 import MasterLoanChargesRoutes from './routes/MasterLoanChargesRoutes';
@@ -12,6 +13,7 @@ const routerSetup = (app, db) => {
   MasterPenaltiesRoutes(app, path, db);
   MasterLoanChargesRoutes(app, path, db);
   CustomersRoutes(app, path, db);
+  CustomerLoansRoutes(app, path, db);
   return;
 };
 
