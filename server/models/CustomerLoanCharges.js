@@ -13,7 +13,6 @@ export default (sequelize) => {
     chargesName: {
       type: Sequelize.STRING(100),
       allowNull: false,
-      unique: true,
     },
     amount: {
       type: Sequelize.INTEGER(30),

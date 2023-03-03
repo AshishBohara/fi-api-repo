@@ -1,3 +1,4 @@
+import jwtVerify from '../middleware/jwt.verify';
 import CustomerLoansRoutes from './routes/CustomerLoansRoutes';
 import CustomersRoutes from './routes/CustomersRoutes';
 import MasterInterestRateRoutes from './routes/MasterInterestRateRoutes';
@@ -8,12 +9,12 @@ import UsersRoutes from './routes/UsersRoutes';
 const path = '/api/v1';
 
 const routerSetup = (app, db) => {
-  UsersRoutes(app, path, db);
-  MasterInterestRateRoutes(app, path, db);
-  MasterPenaltiesRoutes(app, path, db);
-  MasterLoanChargesRoutes(app, path, db);
-  CustomersRoutes(app, path, db);
-  CustomerLoansRoutes(app, path, db);
+  UsersRoutes(app, path, db, jwtVerify.verifyToken);
+  MasterInterestRateRoutes(app, path, db, jwtVerify.verifyToken);
+  MasterPenaltiesRoutes(app, path, db, jwtVerify.verifyToken);
+  MasterLoanChargesRoutes(app, path, db, jwtVerify.verifyToken);
+  CustomersRoutes(app, path, db, jwtVerify.verifyToken);
+  CustomerLoansRoutes(app, path, db, jwtVerify.verifyToken);
   return;
 };
 

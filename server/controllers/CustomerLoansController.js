@@ -23,7 +23,8 @@ export const addLoan = (db) => async (req, res, next) => {
         amount: reqBody.loanCharges[key],
       });
     });
-    await db.CustomerLoanCharge.bulkCreate(loanChargesRecords);
+    console.log(loanChargesRecords);
+    await db.CustomerLoanCharge.bulkCreate(loanChargesRecords, { logging: true });
 
     let loanInstallmentRecords = [];
     let amount = Math.round(reqBody.loanAmount / reqBody.noOfInstallment);
@@ -81,7 +82,10 @@ export const installmemtList = (db) => async (req, res, next) => {
     const customerLoanId = reqQuery.customerLoanId;
     const records = await db.CustomerLoanInstallment.findAll({
       where: { customerId: customerId, customerLoanId: customerLoanId },
-      include: { model: db.Customer, attributes: ['name', 'mobileNumber'] },
+      include: [
+        { model: db.Customer, attributes: ['name', 'mobileNumber'] },
+        { model: db.CustomerLoan, attributes: ['penaltyAmount'] },
+      ],
     });
     if (records) {
       return res.ok({
@@ -89,6 +93,31 @@ export const installmemtList = (db) => async (req, res, next) => {
         data: records,
       });
     }
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const installmemtPayment = (db) => async (req, res, next) => {
+  try {
+    const reqBody = req.body;
+    const record = await db.CustomerLoanInstallment.findOne({
+      where: {
+        id: reqBody.id,
+        customerId: reqBody.customerId,
+        customerLoanId: reqBody.customerLoanId,
+      },
+    });
+    await record.update({
+      penaltyAmount: reqBody.penaltyAmount,
+      totalAmount: reqBody.totalAmount,
+      installmentCompleted: true,
+      paymentReceivedDate: moment().format('YYYY-MM-DD'),
+    });
+    return res.ok({
+      message: 'Success',
+      data: record,
+    });
   } catch (e) {
     next(e);
   }

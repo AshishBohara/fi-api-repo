@@ -1,14 +1,18 @@
 import md5 from 'md5';
+import jwt from 'jsonwebtoken';
+
 export const login = (db) => async (req, res, next) => {
   try {
     const reqBody = req.body;
     const user = await db.User.findOne({
       where: { mobileNumber: reqBody.mobileNumber, password: md5(reqBody.password) },
+      attributes: ['name', 'mobileNumber'],
     });
     if (user) {
+      var token = jwt.sign({ user }, 'afndfnwejrvjfuasofds0fww');
       return res.ok({
         message: 'Success',
-        data: user,
+        data: { user: user, token },
       });
     } else {
       return res.error({
