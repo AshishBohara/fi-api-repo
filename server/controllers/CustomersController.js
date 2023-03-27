@@ -29,7 +29,13 @@ export const create = (db) => async (req, res, next) => {
 
 export const list = (db) => async (req, res, next) => {
   try {
-    const records = await db.Customer.findAll();
+    let limit = +req.query.page_size;
+    let offset = 0 + (req.query.page_no - 1) * limit;
+    const records = await db.Customer.findAndCountAll({
+      offset: offset,
+      limit: limit,
+      order: [['createdAt', 'ASC']],
+    });
     if (records) {
       return res.ok({
         message: 'Success',

@@ -10,6 +10,7 @@ import Customers from './models/Customers';
 import CustomerLoans from './models/CustomerLoans';
 import CustomerLoanCharges from './models/CustomerLoanCharges';
 import CustomerLoanInstallments from './models/CustomerLoanInstallments';
+import CustomerLoanInstallmentPayments from './models/CustomerLoanInstallmentPayments';
 
 const db = {};
 
@@ -43,17 +44,23 @@ export default async () => {
       db.CustomerLoan = CustomerLoans(sequelize);
       db.CustomerLoanCharge = CustomerLoanCharges(sequelize);
       db.CustomerLoanInstallment = CustomerLoanInstallments(sequelize);
+      db.CustomerLoanInstallmentPayment = CustomerLoanInstallmentPayments(sequelize);
       // Define relationship among diffrent tables
       db.Customer.hasMany(db.CustomerLoan);
+
       db.CustomerLoanCharge.belongsTo(db.Customer);
       db.CustomerLoanCharge.belongsTo(db.CustomerLoan);
+
       db.CustomerLoanInstallment.belongsTo(db.Customer);
       db.CustomerLoanInstallment.belongsTo(db.CustomerLoan);
 
-      db.CustomerLoan.belongsTo(db.Customer);
+      db.CustomerLoanInstallmentPayment.belongsTo(db.Customer);
+      db.CustomerLoanInstallmentPayment.belongsTo(db.CustomerLoan);
+      db.CustomerLoanInstallmentPayment.belongsTo(db.CustomerLoanInstallment);
 
       db.Customer.belongsTo(db.User, { foreignKey: 'createdBy' });
       db.Customer.belongsTo(db.User, { foreignKey: 'updatedBy' });
+      db.CustomerLoan.belongsTo(db.Customer);
       db.CustomerLoan.belongsTo(db.User, { foreignKey: 'createdBy' });
       db.CustomerLoan.belongsTo(db.User, { foreignKey: 'updatedBy' });
       db.CustomerLoanCharge.belongsTo(db.User, { foreignKey: 'createdBy' });

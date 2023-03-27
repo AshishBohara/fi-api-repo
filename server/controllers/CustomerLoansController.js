@@ -23,8 +23,7 @@ export const addLoan = (db) => async (req, res, next) => {
         amount: reqBody.loanCharges[key],
       });
     });
-    console.log(loanChargesRecords);
-    await db.CustomerLoanCharge.bulkCreate(loanChargesRecords, { logging: true });
+    await db.CustomerLoanCharge.bulkCreate(loanChargesRecords);
 
     let loanInstallmentRecords = [];
     let amount = Math.round(reqBody.loanAmount / reqBody.noOfInstallment);
@@ -111,8 +110,16 @@ export const installmemtPayment = (db) => async (req, res, next) => {
     await record.update({
       penaltyAmount: reqBody.penaltyAmount,
       totalAmount: reqBody.totalAmount,
-      installmentCompleted: true,
-      paymentReceivedDate: moment().format('YYYY-MM-DD'),
+      dueAmount: reqBody.dueAmount,
+      installmentCompleted: reqBody.dueAmount > 0 ? false : true,
+      // paymentReceivedDate: moment().format('YYYY-MM-DD'),
+    });
+    await db.CustomerLoanInstallmentPayment.create({
+      customerLoanInstallmentId: record.id,
+      customerId: reqBody.customerId,
+      customerLoanId: reqBody.customerLoanId,
+      receivedAmount: reqBody.payAmount,
+      isDeleted: false,
     });
     return res.ok({
       message: 'Success',
