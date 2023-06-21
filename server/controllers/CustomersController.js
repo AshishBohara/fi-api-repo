@@ -1,3 +1,5 @@
+import { Op, Sequelize } from 'sequelize';
+
 export const create = (db) => async (req, res, next) => {
   try {
     const reqBody = req.body;
@@ -30,11 +32,18 @@ export const create = (db) => async (req, res, next) => {
 export const list = (db) => async (req, res, next) => {
   try {
     let limit = +req.query.page_size;
+    let search_contain = req.query.search_contain;
     let offset = 0 + (req.query.page_no - 1) * limit;
+
     const records = await db.Customer.findAndCountAll({
+      where: {
+        [Op.or]: [
+          { name: { [Op.like]: `%${search_contain}%` } },
+          { mobileNumber: { [Op.like]: `%${search_contain}%` } },
+        ],
+      },
       offset: offset,
       limit: limit,
-      order: [['createdAt', 'ASC']],
     });
     if (records) {
       return res.ok({
